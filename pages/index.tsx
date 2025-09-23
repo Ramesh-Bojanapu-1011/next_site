@@ -11,7 +11,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="flex min-h-screen flex-col items-center justify-center bg-white dark:bg-black py-2">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-white caret-transparent dark:bg-black py-2  ">
         <ModeToggle />
         <p className="text-lg mt-4 text-black dark:text-white">
           Hello, this is a sample page with a theme toggle button.
