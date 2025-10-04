@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next/types";
 import { dbConnect } from "../../../src/lib/mongodb";
-import { Session, Employee } from "../../../src/models/EmployeeSession";
+import { Session } from "../../../src/models/EmployeeSession";
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,13 +10,14 @@ export default async function handler(
     return res.status(405).json({ error: "Method not allowed" });
   }
   await dbConnect();
-  const activeSessions = await Session.find({ logoutTime: null }).populate(
-    "employeeId",
-  );
-  const active = activeSessions.map((s: any) => ({
-    employeeId: s.employeeId._id,
-    name: s.employeeId.name,
-    loginTime: s.loginTime,
-  }));
+  const activeSessions = await Session.find({ logoutTime: null }).populate("employeeId");
+  const active = activeSessions.map((s) => {
+    const emp = s.employeeId as unknown as { _id: string; name: string };
+    return {
+      employeeId: emp._id,
+      name: emp.name,
+      loginTime: s.loginTime,
+    };
+  });
   res.status(200).json(active);
 }
