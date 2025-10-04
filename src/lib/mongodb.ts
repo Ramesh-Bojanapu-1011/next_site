@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI ="mongodb+srv://bramesh1011_db_user:TnDJ6ojpLBD1yM10@cluster0.op1xcuz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const MONGODB_URI =
+  "mongodb+srv://bramesh1011_db_user:TnDJ6ojpLBD1yM10@cluster0.op1xcuz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 if (!MONGODB_URI) {
   throw new Error("Please define the MONGODB_URI environment variable");
@@ -32,8 +33,17 @@ export async function dbConnect() {
       })
       .then((mongoose) => {
         return mongoose;
+      })
+      .catch((err) => {
+        console.error("MongoDB connection error:", err);
+        throw err;
       });
   }
-  cached.conn = await cached.promise;
-  return cached.conn;
+  try {
+    cached.conn = await cached.promise;
+    return cached.conn;
+  } catch (err) {
+    console.error("MongoDB connection failed:", err);
+    throw err;
+  }
 }

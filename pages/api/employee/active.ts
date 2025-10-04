@@ -10,7 +10,9 @@ export default async function handler(
     return res.status(405).json({ error: "Method not allowed" });
   }
   await dbConnect();
-  const activeSessions = await Session.find({ logoutTime: null }).populate("employeeId");
+  const activeSessions = await Session.find({ logoutTime: null }).populate(
+    "employeeId",
+  );
   const active = activeSessions.map((s) => {
     const emp = s.employeeId as unknown as { _id: string; name: string };
     return {
